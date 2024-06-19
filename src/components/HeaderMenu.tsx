@@ -27,7 +27,7 @@ export function  HeaderMenu({ title, items }: HeaderMenuProps) {
   
   return (
     <div className="group relative"  onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-    <span className="cursor-pointer">{title}</span>
+    <span className="cursor-pointer hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium text-custon-black">{title}</span>
     {items && isSubMenuOpen && (
       <HeaderSubMenu items={items} />
     )}
