@@ -9,6 +9,7 @@ export default {
       colors: {
         'custon-button-color': '#f97648',
         'custon-menu-color': '#1d0a04',
+        'custom-header-color': '#F4F4F4',
       },
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif'],
@@ -21,9 +22,13 @@ export default {
         'carousel-image2': "url('/src/assets/image2.jpg')",
         'carousel-image3': "url('/src/assets/image3.jpg')",
         'carousel-image4': "url('/src/assets/image4.jpg')",
-      })
+      }),
+      transitionProperty: {
+        'transform-opacity': 'transform, opacity',
+      }
     },
   },
-  plugins: [],
+  plugins: [
+  ],
 }
 
