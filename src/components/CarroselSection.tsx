@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,68 +8,154 @@ import image3 from "../assets/image-3.jpeg";
 import image4 from "../assets/image-4.jpeg";
 
 export function CarouselSection() {
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [progress, setProgress] = useState<number>(0);
+  const sliderRef = useRef<Slider>(null); // Ref para o Slider
+
+  const images = [image1, image2, image3, image4];
+  const titles = [
+    "Creche",
+    "Ensino Pré-Escolar",
+    "1º. Ciclo",
+    "Casa de Acolhimento"
+  ];
+
   const settings = {
-    dots: true,
+    dots: false, // Removendo as bolinhas de navegação
     infinite: true,
     autoplay: true,
-    autoplaySpeed: 15000,
+    autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    adaptiveHeight: true
+    adaptiveHeight: true,
+    beforeChange: (oldIndex: number, newIndex: number) => {
+      setCurrentSlide(newIndex);
+      setProgress(0); // Reinicia o progresso ao mudar de slide
+    },
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        if (prevProgress < 100) {
+          return prevProgress + 1; // Incrementa o progresso enquanto não atingir 100%
+        } else {
+          return 0; // Reinicia o progresso ao atingir 100%
+        }
+      });
+    }, settings.autoplaySpeed / 100);
+
+    return () => clearInterval(interval);
+  }, [currentSlide, settings.autoplaySpeed]);
+
+  useEffect(() => {
+    if (progress >= 100 && sliderRef.current) {
+      sliderRef.current.slickNext(); // Avança para o próximo slide quando o progresso atinge 100%
+    }
+  }, [progress]);
+
+  const handleBarClick = (index: number) => {
+    if (sliderRef.current && typeof sliderRef.current.slickGoTo === 'function') {
+      sliderRef.current.slickGoTo(index); // Navega para o slide correspondente ao índice clicado
+    }
   };
 
   return (
-    <section className="relative h-screen">
-      <Slider {...settings}>
-        <div>
-          <div className="h-screen bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${image1})` }}>
-            <div className="text-center text-white p-6 md:p-12 animate-fade">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 transition-transform-opacity">O seu bebé é precioso.<br />Nós velamos por ele</h1>
-              <p className="text-lg md:text-xl mb-8 font-poppins transition-transform-opacity">Promovemos uma educação personalizante e libertadora, concebendo-a como o desabrochar progressivo e harmonioso de todas as faculdades da criança.</p>
-              <div className="flex justify-center space-x-2">
-                <button className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 text-white font-bold py-2 px-4 md:mx-2 mb-2 md:mb-0">Saber mais</button>
-                <button className="bg-transparent border-2 border-white text-white font-bold py-2 px-4 rounded-lg md:mx-2 mb-2 md:mb-0">Ver oferta educativa</button>
+    <section className="relative h-screen overflow-x-hidden">
+    <style>
+      {`
+        .slick-slider {
+          scrollbar-width: thin;
+          scrollbar-color: #ff9800 #1a202c; /* Define as cores do scroll */
+          height: 100vh; /* Ajuste para ocupar toda a altura da tela */
+          overflow-y: auto; /* Ajuste conforme necessário para o scroll vertical */
+          overflow-x: hidden;
+          }
+        .slick-slider::-webkit-scrollbar {
+          width: 10px; /* Largura da barra de rolagem */
+        }
+        .slick-slider::-webkit-scrollbar-track {
+          background: #1a202c; /* Cor de fundo da barra de rolagem */
+          border-radius: 10px; /* Arredonda as bordas da barra de rolagem */
+        }
+        .slick-slider::-webkit-scrollbar-thumb {
+          background-color: #ff9800; /* Cor do thumb */
+          border-radius: 10px; /* Arredonda as bordas do thumb */
+          border: 2px solid #1a202c; /* Borda para destacar o thumb */
+        }
+      `}
+    </style>
+
+
+
+      <Slider ref={sliderRef} {...settings}>
+        {images.map((image, index) => (
+          <div key={index} className="relative  h-screen overflow-x-hidden">
+            <div className="h-screen bg-cover bg-center flex items-center justify-center relative" style={{ backgroundImage: `url(${image})`, maxWidth: '100%', overflow: 'hidden' }}>
+              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div> {/* Overlay */}
+              <div className="absolute inset-0 md:mt-32 flex flex-col items-center justify-center text-white p-6 md:p-12 animate-fade z-10">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 transition-transform-opacity cursor-pointer" onClick={() => handleBarClick(index)}>
+                  {getTitleByIndex(index)}
+                </h1>
+                <p className="text-lg md:text-xl mt-4 mb-8 font-poppins transition-transform-opacity">
+                  {getDescriptionByIndex(index)}
+                </p>
+                <div className="flex flex-col mt-6 items-center space-y-4">
+                  <div className="flex justify-center space-x-2">
+                    <button className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 text-white font-bold py-2 px-4 md:mx-2 mb-2 md:mb-0">
+                      Saber mais
+                    </button>
+                    <button className="bg-transparent border-2 border-white text-white font-bold py-2 px-4 rounded-lg md:mx-2 mb-2 md:mb-0">
+                      Ver oferta educativa
+                    </button>
+                  </div>
+                  {/* Barra de progresso */}
+                  <div className="flex justify-center space-x-4 cursor-pointer">
+                    {titles.map((title, barIndex) => (
+                      <div key={barIndex} className="flex flex-col items-center mt-6 md:mt-10 text-white cursor-pointer" onClick={() => handleBarClick(barIndex)}>
+                        <p className="mt-1 text-base md:text-lg">{title}</p>
+                        <div className="relative h-1 w-full md:w-44 bg-gray-300 mt-2 rounded-lg overflow-hidden">
+                          <div className={`h-full ${barIndex === currentSlide ? 'bg-white' : 'bg-gray-300'}`} style={{ width: `${barIndex === currentSlide ? progress : 0}%` }}></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div>
-          <div className="h-screen bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${image2})` }}>
-            <div className="text-center text-white p-6 md:p-12">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 transition-transform-opacity">Ajudamos a dar o primeiro passo</h1>
-              <p className="text-lg md:text-xl mb-8 font-poppins transition-transform-opacity">Atendemos de modo específico às áreas do desenvolvimento psico-motor, cognitivo, comunicação e construção de códigos formais de aprendizagem.</p>
-              <div className="flex justify-center space-x-2">
-                <button className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 text-white font-bold py-2 px-4 md:mx-2 mb-2 md:mb-0">Saber mais</button>
-                <button className="bg-transparent border-2 border-white text-white font-bold py-2 px-4 rounded-lg md:mx-2 mb-2 md:mb-0">Ver oferta educativa</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="h-screen bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${image3})` }}>
-            <div className="text-center text-white p-6 md:p-12">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 transition-transform-opacity">O futuro começa aqui, nós impulsionamos</h1>
-              <p className="text-lg md:text-xl mb-8 font-poppins transition-transform-opacity">Proporcionamos à criança uma formação sólida e de qualidade, que a prepare para o futuro, para o prosseguimento dos estudos e para a vida ativa.</p>
-              <div className="flex justify-center space-x-2">
-                <button className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 text-white font-bold py-2 px-4 md:mx-2 mb-2 md:mb-0">Saber mais</button>
-                <button className="bg-transparent border-2 border-white text-white font-bold py-2 px-4 rounded-lg md:mx-2 mb-2 md:mb-0">Ver oferta educativa</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="h-screen bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${image4})` }}>
-            <div className="text-center text-white p-6 md:p-12">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 transition-transform-opacity">Uma família a quem precisa</h1>
-              <p className="text-lg md:text-xl mb-8 font-poppins transition-transform-opacity">Facultamos às crianças e jovens todas as necessidades básicas em condições de vida que permitam a experiência de uma vida familiar estruturada.</p>
-              <div className="flex justify-center space-x-2">
-                <button className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 text-white font-bold py-2 px-4 md:mx-2 mb-2 md:mb-0">Saber mais</button>
-                <button className="bg-transparent border-2 border-white text-white font-bold py-2 px-4 rounded-lg md:mx-2 mb-2 md:mb-0">Ver oferta educativa</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </Slider>
     </section>
   );
+}
+
+function getTitleByIndex(index: number) {
+  switch (index) {
+    case 0:
+      return <p className="text-center md:text-left">O seu bebé é precioso. <br/> Nós velamos por ele</p>
+    case 1:
+      return <p className="text-center md:text-left">Ajudamos a dar o primeiro <br/> <span className="block">passo</span></p>
+    case 2:
+      return <p className="text-center md:text-left">O futuro começa aqui, nós <br/> <span className="block">impulsionamos</span></p>
+    case 3:
+      return <p className="text-center md:text-left">Uma família a quem precisa</p>;
+    default:
+      return "";
+  }
+}
+
+function getDescriptionByIndex(index: number) {
+  switch (index) {
+    case 0:
+      return <p className="text-center md:text-left">Promovemos uma educação personalizante e libertadora, concebendo-a como o <br/> desabrochar progressivo e harmonioso de todas as faculdades da criança.</p>
+    case 1:
+      return <p className="text-center md:text-left">Atendemos de modo específico às áreas do desenvolvimento psico-motor, <br/> cognitivo, comunicação e construção de códigos formais de aprendizagem.</p>
+    case 2:
+      return <p className="text-center md:text-left">Proporcionamos à criança uma formação sólida e de qualidade, que a prepare para <br/> o futuro, para o prosseguimento dos estudos e para a vida ativa.</p>
+    case 3:
+      return <p className="text-center md:text-left">Facultamos às crianças e jovens todas as necessidades básicas em condições de <br/> vida que permitam a experiência de uma vida familiar estruturada.</p>;
+    default:
+      return "";
+  }
 }
