@@ -1,8 +1,9 @@
-import { SectionOne } from './components/SectionOne'
+import { HomePage } from './components/HomePage'
+import './App.css'
 
 function App() {
   return (
-    <SectionOne/>
+    <HomePage/>
   )
 }
 

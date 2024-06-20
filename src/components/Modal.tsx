@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { menuItems } from "../hooks/menuData";
 
 interface ModalProps {
@@ -8,7 +8,21 @@ interface ModalProps {
   toggleSubMenu: (index: number) => void;
 }
 
-const Modal = ({ isOpen, expandedMenus, toggleSubMenu }: ModalProps) => {
+const Modal = ({ isOpen, onClose, expandedMenus, toggleSubMenu }: ModalProps) => {
+  // Adiciona o event listener quando o componente é montado e remove quando é desmontado
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isOpen) {  // Ajuste o valor conforme necessário para o breakpoint desejado
+        onClose();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -59,9 +73,7 @@ const Modal = ({ isOpen, expandedMenus, toggleSubMenu }: ModalProps) => {
                   </div>
                 )}
                 <hr className='text-black w-full'/>
-
               </div>
-              
             ))}
             {/* Botão "Contactos" dentro do menu hamburguer */}
             <button

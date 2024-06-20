@@ -7,7 +7,7 @@ import image2 from "../assets/image-2.jpeg";
 import image3 from "../assets/image-3.jpeg";
 import image4 from "../assets/image-4.jpeg";
 
-export function CarouselSection() {
+export function FirstSection() {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const sliderRef = useRef<Slider>(null); // Ref para o Slider
@@ -21,7 +21,7 @@ export function CarouselSection() {
   ];
 
   const settings = {
-    dots: false, // Removendo as bolinhas de navegação
+    dots: false,
     infinite: true,
     autoplay: true,
     autoplaySpeed: 5000,
@@ -54,6 +54,11 @@ export function CarouselSection() {
     }
   }, [progress]);
 
+  const slideStyles = (index: number) => {
+    // Verifica se o índice do slide é o índice atual
+    return index === currentSlide ? "slide-content animate-slide-in" : "slide-content";
+  };
+
   const handleBarClick = (index: number) => {
     if (sliderRef.current && typeof sliderRef.current.slickGoTo === 'function') {
       sliderRef.current.slickGoTo(index); // Navega para o slide correspondente ao índice clicado
@@ -61,39 +66,13 @@ export function CarouselSection() {
   };
 
   return (
-    <section className="relative h-screen overflow-x-hidden">
-    <style>
-      {`
-        .slick-slider {
-          scrollbar-width: thin;
-          scrollbar-color: #ff9800 #1a202c; /* Define as cores do scroll */
-          height: 100vh; /* Ajuste para ocupar toda a altura da tela */
-          overflow-y: auto; /* Ajuste conforme necessário para o scroll vertical */
-          overflow-x: hidden;
-          }
-        .slick-slider::-webkit-scrollbar {
-          width: 10px; /* Largura da barra de rolagem */
-        }
-        .slick-slider::-webkit-scrollbar-track {
-          background: #1a202c; /* Cor de fundo da barra de rolagem */
-          border-radius: 10px; /* Arredonda as bordas da barra de rolagem */
-        }
-        .slick-slider::-webkit-scrollbar-thumb {
-          background-color: #ff9800; /* Cor do thumb */
-          border-radius: 10px; /* Arredonda as bordas do thumb */
-          border: 2px solid #1a202c; /* Borda para destacar o thumb */
-        }
-      `}
-    </style>
-
-
-
+    <section className="relative h-screen overflow-hidden">
       <Slider ref={sliderRef} {...settings}>
         {images.map((image, index) => (
-          <div key={index} className="relative  h-screen overflow-x-hidden">
+          <div key={index} className="relative h-screen overflow-x-hidden">
             <div className="h-screen bg-cover bg-center flex items-center justify-center relative" style={{ backgroundImage: `url(${image})`, maxWidth: '100%', overflow: 'hidden' }}>
               <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div> {/* Overlay */}
-              <div className="absolute inset-0 md:mt-32 flex flex-col items-center justify-center text-white p-6 md:p-12 animate-fade z-10">
+              <div className={`absolute inset-0 md:mt-32 flex flex-col items-center justify-center text-white p-6 md:p-12 z-10 ${slideStyles(index)}`}>
                 <h1 className="text-4xl md:text-5xl font-bold mb-4 transition-transform-opacity cursor-pointer" onClick={() => handleBarClick(index)}>
                   {getTitleByIndex(index)}
                 </h1>
@@ -133,11 +112,11 @@ export function CarouselSection() {
 function getTitleByIndex(index: number) {
   switch (index) {
     case 0:
-      return <p className="text-center md:text-left">O seu bebé é precioso. <br/> Nós velamos por ele</p>
+      return <p className="text-center md:text-left">O seu bebé é precioso. <br /> Nós velamos por ele</p>
     case 1:
-      return <p className="text-center md:text-left">Ajudamos a dar o primeiro <br/> <span className="block">passo</span></p>
+      return <p className="text-center md:text-left">Ajudamos a dar o primeiro <br /> <span className="block">passo</span></p>
     case 2:
-      return <p className="text-center md:text-left">O futuro começa aqui, nós <br/> <span className="block">impulsionamos</span></p>
+      return <p className="text-center md:text-left">O futuro começa aqui, nós <br /> <span className="block">impulsionamos</span></p>
     case 3:
       return <p className="text-center md:text-left">Uma família a quem precisa</p>;
     default:
@@ -148,13 +127,13 @@ function getTitleByIndex(index: number) {
 function getDescriptionByIndex(index: number) {
   switch (index) {
     case 0:
-      return <p className="text-center md:text-left">Promovemos uma educação personalizante e libertadora, concebendo-a como o <br/> desabrochar progressivo e harmonioso de todas as faculdades da criança.</p>
+      return <p className="text-center md:text-left">Promovemos uma educação personalizante e libertadora, concebendo-a como o <br /> desabrochar progressivo e harmonioso de todas as faculdades da criança.</p>
     case 1:
-      return <p className="text-center md:text-left">Atendemos de modo específico às áreas do desenvolvimento psico-motor, <br/> cognitivo, comunicação e construção de códigos formais de aprendizagem.</p>
+      return <p className="text-center md:text-left">Atendemos de modo específico às áreas do desenvolvimento psico-motor, <br /> cognitivo, comunicação e construção de códigos formais de aprendizagem.</p>
     case 2:
-      return <p className="text-center md:text-left">Proporcionamos à criança uma formação sólida e de qualidade, que a prepare para <br/> o futuro, para o prosseguimento dos estudos e para a vida ativa.</p>
+      return <p className="text-center md:text-left">Proporcionamos à criança uma formação sólida e de qualidade, que a prepare para <br /> o futuro, para o prosseguimento dos estudos e para a vida ativa.</p>
     case 3:
-      return <p className="text-center md:text-left">Facultamos às crianças e jovens todas as necessidades básicas em condições de <br/> vida que permitam a experiência de uma vida familiar estruturada.</p>;
+      return <p className="text-center md:text-left">Facultamos às crianças e jovens todas as necessidades básicas em condições de <br /> vida que permitam a experiência de uma vida familiar estruturada.</p>;
     default:
       return "";
   }

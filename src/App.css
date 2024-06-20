@@ -1,0 +1,36 @@
+/* App.css */
+
+/* Estilos para a scrollbar */
+::-webkit-scrollbar {
+  width: 12px; /* largura da scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #F4F4F4; /* cor de fundo da scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ff9800; /* cor da bolinha da scrollbar */
+  border-radius: 10px; /* borda arredondada */
+  border: 2px solid #F4F4F4; /* borda para destacar a bolinha */
+  height: 10px; /* altura da bolinha laranja */
+  min-height: 10px; /* altura mínima da bolinha laranja */
+}
+  
+  /* App.css ou no seu arquivo de estilos global */
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
