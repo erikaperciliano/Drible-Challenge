@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import image1 from "../assets/image-1.jpeg";
-import image2 from "../assets/image-2.jpeg";
-import image3 from "../assets/image-3.jpeg";
-import image4 from "../assets/image-4.jpeg";
+import image1 from "../../assets/image-1.jpeg";
+import image2 from "../../assets/image-2.jpeg";
+import image3 from "../../assets/image-3.jpeg";
+import image4 from "../../assets/image-4.jpeg";
 
-export function FirstSection() {
+export function Carrousel() {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const sliderRef = useRef<Slider>(null); // Ref para o Slider

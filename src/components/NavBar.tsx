@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { menuItems } from "../hooks/menuData";
-import Modal from './Modal';
-import { HeaderMenu } from './HeaderMenu';
+import { HeaderMenu } from './Headers/HeaderMenu';
+import Modal from './FirstSection/Modal';
 
 export function NavBar() {
   const isMobileOrTablet = useMediaQuery({ maxWidth: 768 }); // Detecta se é mobile ou tablet

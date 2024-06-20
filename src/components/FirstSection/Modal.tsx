@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { menuItems } from "../hooks/menuData";
+import { menuItems } from '../../hooks/menuData';
 
 interface ModalProps {
   isOpen: boolean;

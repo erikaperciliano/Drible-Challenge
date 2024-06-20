@@ -13,6 +13,7 @@ export default {
       },
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif'],
+        'petrona': ['Petrona', 'sans-serif'],
       },
       fontWeight: {
         medium: '500'
