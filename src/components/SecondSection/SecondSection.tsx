@@ -3,9 +3,9 @@ import { DropdownButton } from './DropdownButton';
 
 export function SecondSection() {
   return (
-    <section className="bg-white py-12 h-screen flex flex-col justify-start items-start"> {/* Flexbox para alinhar à esquerda e no topo */}
+    <section className="bg-white py-12 h-screen flex flex-col justify-start items-start">
       <div className="container mx-auto px-4">
-        <div className="text-left mb-8"> {/* Ajustado para alinhar à esquerda */}
+        <div className="text-left mb-8">
           <h1 className="mb-4 font-petrona text-5xl text-black font-medium">
             A nossa <span className="shadow-md inline-block px-4 py-2 rounded-lg bg-gray-200">equipa</span>
           </h1>

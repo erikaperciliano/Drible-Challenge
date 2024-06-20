@@ -12,7 +12,7 @@ const Modal = ({ isOpen, onClose, expandedMenus, toggleSubMenu }: ModalProps) =>
   // Adiciona o event listener quando o componente é montado e remove quando é desmontado
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768 && isOpen) {  // Ajuste o valor conforme necessário para o breakpoint desejado
+      if (window.innerWidth > 768 && isOpen) {
         onClose();
       }
     };
